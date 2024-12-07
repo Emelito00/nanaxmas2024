@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nana's Page - Videos, Songs, and More!</title>
+    <style>
+        body {
+            font-family: Arial Rounded, sans-serif;
+            background-color: red;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        header {
+            background-color: #000;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+        }
+        section {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        iframe {
+            margin: 20px auto;
+            display: block;
+            border: none;
+        }
+        .image-container img {
+            width: 50%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Nana's Page</h1>
+        <p>Explore videos, songs, and pictures of Bluey!</p>
+    </header>
+
+    <!-- Search Section -->
+    <section>
+        <h2>Search for Songs</h2>
+        <form class="search-bar" action="https://www.youtube.com/results" method="get" target="_blank">
+            <input type="text" name="search_query" id="searchQuery" placeholder="Enter song or video name">
+            <input type="submit" value="Search">
+        </form>
+        <iframe id="search-result" width="560" height="315" src=""
+            title="Search Result" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </section>
+
+    <!-- Video Section -->
+    <section id="videos">
+        <h2>Watch Music Videos</h2>
+        <button onclick="playVideo('https://www.youtube.com/embed/LKt-9Q3eN1g')">Rose's Song - APT</button>
+        <button onclick="playVideo('https://www.youtube.com/embed/8I3kFuv7ZzA')">Jennie's Song - Mantra</button>
+        <button onclick="playVideo('https://www.youtube.com/embed/a3Xd56lH0P8')">Katseye's Song - Touch</button>
+        <div id="video-player"></div>
+    </section>
+
+    <!-- Images Section -->
+    <section>
+        <h2>Gallery</h2>
+        <div class="image-container">
+            <img id="blueyImage" src="" alt="Bluey">
+        </div>
+    </section>
+
+    <script>
+        // Load the IFrame Player API code asynchronously.
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+            // YouTube IFrame Player API ready function
+        }
+
+        function playVideo(videoId) {
+            if (player) {
+                player.destroy();
+            }
+            player = new YT.Player('video-player', {
+                height: '315',
+                width: '560',
+                videoId: videoId.split('/').pop(),
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.setVolume(50); // Set volume to 50%
+            event.target.playVideo(); // Automatically play the video
+        }
+
+        // Array of placeholder image URLs (these can be updated with actual image URLs)
+        const images = [
+            'https://via.placeholder.com/400x400?text=Bluey+1',
+            'https://via.placeholder.com/400x400?text=Bluey+2',
+            'https://via.placeholder.com/400x400?text=Bluey+3',
+            // Add more placeholders or real image URLs as needed
+        ];
+
+        // Randomly select an image from the array
+        document.getElementById('blueyImage').src = images[Math.floor(Math.random() * images.length)];
+
+        function searchSong(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchQuery').value.trim();
+            if (query) {
+                const iframe = document.getElementById('search-result');
+                iframe.src = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query)}`;
+            }
+        }
+    </script>
+</body>
+</html>
